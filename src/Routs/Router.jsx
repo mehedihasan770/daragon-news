@@ -2,6 +2,12 @@ import { createBrowserRouter } from "react-router";
 import HomeLayouts from "../Layouts/HomeLayouts";
 import Home from "../Pages/Home";
 import CategoryNews from "../Pages/CategoryNews";
+import Login from "../Pages/Login";
+import SignUp from "../Pages/SignUp";
+import AuthLayout from "../Layouts/AuthLayout";
+import NewsDetails from "../Pages/NewsDetails";
+import PrivetRouts from "../PrivetRouts/PrivetRouts";
+import Loadin from "../Components/Loadin";
 
 export const router = createBrowserRouter([
     {
@@ -15,17 +21,33 @@ export const router = createBrowserRouter([
             {
                 path: "category/:id",
                 element: <CategoryNews/>,
-                loader: () => fetch('/news.json')
+                loader: () => fetch('/news.json'),
+                hydrateFallbackElement: <Loadin></Loadin>
             },
         ]
     },
     {
         path: 'auth',
-        element: <h1>hallo auth</h1>
+        element: <AuthLayout></AuthLayout>,
+
+        children: [
+            {
+                path: '/auth/login',
+                element: <Login></Login>
+            },
+            {
+                path: '/auth/signup',
+                element: <SignUp></SignUp>
+            },
+        ]
     },
     {
-        path: 'news',
-        element: <h1>hallo news</h1>
+        path: 'news-details/:id',
+        element: <PrivetRouts>
+            <NewsDetails></NewsDetails>
+        </PrivetRouts>,
+        loader: () => fetch('/news.json'),
+        hydrateFallbackElement: <Loadin></Loadin>
     },
     {
         path: '*',
